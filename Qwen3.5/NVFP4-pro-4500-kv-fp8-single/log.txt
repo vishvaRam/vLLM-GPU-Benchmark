@@ -1,0 +1,15 @@
+
+AxionML/Qwen3.5-9B-NVFP4
+--port 8000 
+--host 0.0.0.0 
+--max-model-len 20k 
+--kv-cache-dtype fp8
+--gpu-memory-utilization 0.90
+--enable-prefix-caching
+--enable-chunked-prefill
+--max-num-batched-tokens 20k 
+--trust-remote-code 
+
+
+GPU KV cache size: 817,600 tokens
+Maximum concurrency for 20,000 tokens per request: 40.88x

@@ -1,0 +1,44 @@
+services:
+  guidellm-bench:
+    image: ghcr.io/vllm-project/guidellm:latest
+    container_name: guidellm-bench
+
+    environment:
+      USER: guidellm
+      LOGNAME: guidellm
+      HOME: /tmp
+    
+    # volumes:
+    #   - ./Qwen3.5/NVFP4-pro-4500-kv-fp8-single:/results
+
+    volumes:
+      - ./Qwen3.5/NVFP4-pro-4500-kv-fp8-16req:/results
+   
+    # command: >
+    #   benchmark 
+    #   --target "https://4ub2jh8b8yc4pj-8000.proxy.runpod.net/" 
+    #   --model "AxionML/Qwen3.5-9B-NVFP4" 
+    #   --request-type chat_completions 
+    #   --profile synchronous
+    #   --max-requests 2
+    #   --max-errors 2
+    #   --data '{"kind": "huggingface", "source": "lmms-lab/MMBench_EN", "load_kwargs": {"split": "test"}, "prompt_tokens": 8000, "output_tokens": 2000}' 
+    #   --data-column-mapper '{"image_column": "image", "text_column": "question"}' 
+    #   --output-dir /results
+    #   --outputs benchmark_single.json,benchmark_single.csv,benchmark_single.html
+
+    command: >
+      benchmark 
+      --target "https://4ub2jh8b8yc4pj-8000.proxy.runpod.net/" 
+      --model "AxionML/Qwen3.5-9B-NVFP4" 
+      --request-type chat_completions
+      --profile concurrent
+      --rate 16
+      --max-requests 16
+      --warmup 0.1
+      --cooldown 0.1
+      --max-errors 16
+      --data '{"kind": "huggingface", "source": "lmms-lab/MMBench_EN", "load_kwargs": {"split": "test"}, "prompt_tokens": 8000, "output_tokens": 2000}' 
+      --data-column-mapper '{"image_column": "image", "text_column": "question"}' 
+      --output-dir /results
+      --outputs benchmark_burst.json,benchmark_burst.csv,benchmark_burst.html
