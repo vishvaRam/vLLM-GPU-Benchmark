@@ -9,36 +9,36 @@ services:
       HOME: /tmp
     
     # volumes:
-    #   - ./Qwen3.5/Autoround-L4-kv-fp8_e4m3-FLASHINFER-batched-8k-single:/results
+    #   - ./Qwen3.5/NVFP4-RTX-PRO-6000-kv-auto-FLASH_ATTN-single:/results
 
-    # volumes:
-    #   - ./Qwen3.5/Autoround-L4-kv-fp8_e4m3-FLASHINFER-batched-8k-16req:/results
+    volumes:
+      - ./Qwen3.5/NVFP4-RTX-PRO-6000-kv-auto-FLASH_ATTN-16req:/results
    
-    command: >
-      benchmark 
-      --target "https://1knr0m2d6gijc9-8000.proxy.runpod.net/" 
-      --model "Vishva007/Qwen3.5-9B-W4A16-AutoRound" 
-      --request-type chat_completions
-      --profile synchronous
-      --max-requests 2
-      --max-errors 2
-      --data '{"kind": "huggingface", "source": "lmms-lab/MMBench_EN", "load_kwargs": {"split": "test"}, "prompt_tokens": 8000, "output_tokens": 2000}' 
-      --data-column-mapper '{"image_column": "image", "text_column": "question"}' 
-      --output-dir /results
-      --outputs benchmark_single.json,benchmark_single.csv,benchmark_single.html
-
     # command: >
     #   benchmark 
-    #   --target "https://1knr0m2d6gijc9-8000.proxy.runpod.net/" 
-    #   --model "Vishva007/Qwen3.5-9B-W4A16-AutoRound" 
+    #   --target "https://vyvzsztlxdoi7i-8000.proxy.runpod.net/" 
+    #   --model "kaitchup/Qwen3.5-9B-autoround-NVFP4" 
     #   --request-type chat_completions
-    #   --profile concurrent
-    #   --rate 16
-    #   --max-requests 16
-    #   --warmup 0.1
-    #   --cooldown 0.1
-    #   --max-errors 16
+    #   --profile synchronous
+    #   --max-requests 2
+    #   --max-errors 2
     #   --data '{"kind": "huggingface", "source": "lmms-lab/MMBench_EN", "load_kwargs": {"split": "test"}, "prompt_tokens": 8000, "output_tokens": 2000}' 
     #   --data-column-mapper '{"image_column": "image", "text_column": "question"}' 
     #   --output-dir /results
-    #   --outputs benchmark_burst.json,benchmark_burst.csv,benchmark_burst.html
+    #   --outputs benchmark_single.json,benchmark_single.csv,benchmark_single.html
+
+    command: >
+      benchmark 
+      --target "https://vyvzsztlxdoi7i-8000.proxy.runpod.net/"
+      --model "kaitchup/Qwen3.5-9B-autoround-NVFP4" 
+      --request-type chat_completions
+      --profile concurrent
+      --rate 16
+      --max-requests 16
+      --warmup 0.1
+      --cooldown 0.1
+      --max-errors 16
+      --data '{"kind": "huggingface", "source": "lmms-lab/MMBench_EN", "load_kwargs": {"split": "test"}, "prompt_tokens": 8000, "output_tokens": 2000}' 
+      --data-column-mapper '{"image_column": "image", "text_column": "question"}' 
+      --output-dir /results
+      --outputs benchmark_burst.json,benchmark_burst.csv,benchmark_burst.html
